@@ -1,0 +1,20 @@
+.App {
+  text-align: center;
+}
+
+.sorting-container {
+  border: 1px solid #000;
+  width: 60vw;
+  height: 70vh;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.sorting-column {
+  background-color: #00f;
+  height: 100%;
+  width: 1%;
+  margin-top: auto;
+}
