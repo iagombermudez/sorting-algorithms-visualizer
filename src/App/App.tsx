@@ -1,22 +1,32 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Column, IColumn } from "../classes/Column";
-import { changeArrayPositions } from "../functions/arrayFunctions";
+import { bubblesortStep } from "../functions/sortingFunctions";
 import "../styles/App.css";
 
 function App() {
-  const [numColumns, setNumColumns] = useState(20);
-  const [columns, setColumns] = useState<IColumn[]>(
+  const [numColumns, setNumColumns] = useState(100);
+  const [columns, setColumns] = useState<number[]>(
     initializeRandomSortingColumns()
   );
+  const [index, setIndex] = useState<number>(0);
 
-  function initializeRandomSortingColumns(): Column[] {
-    return Array.from(
-      { length: numColumns },
-      (_, index) => new Column(Math.random() * 100, index)
-    );
+  function initializeRandomSortingColumns(): number[] {
+    return Array.from({ length: numColumns }, () => Math.random() * 100);
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setColumns(bubblesortStep(columns, index));
+      setIndex(index + 1);
+
+      if (index === numColumns - 2) {
+        setIndex(0);
+      }
+    }, 1);
+
+    return () => clearTimeout(timer);
+  });
 
   return (
     <div className="App">
@@ -27,7 +37,7 @@ function App() {
             id={index.toString()}
             className="sorting-column"
             data-testid="sorting-column"
-            style={{ height: `${c.height}%` }}
+            style={{ height: `${c}%` }}
           />
         ))}
       </div>

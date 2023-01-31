@@ -12,7 +12,7 @@ export function bubblesortPass(array: number[]) {
   return array;
 }
 
-export function bubblesortStep(array: number[], index: number) {
+export function bubblesortStep<T>(array: T[], index: number) {
   if (array[index] > array[index + 1]) {
     let temp = array[index];
     array[index] = array[index + 1];
