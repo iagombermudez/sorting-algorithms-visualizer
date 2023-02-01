@@ -1,24 +1,19 @@
-export function bubblesort(array: number[]) {
-  let sorted: boolean = false;
-  while (!sorted) {
-    array = bubblesortPass(array);
-    sorted = checkIsSorted(array);
-  }
-  return array;
-}
-
-export function bubblesortPass(array: number[]) {
-  array.forEach((_, i) => (array = bubblesortStep(array, i)));
-  return array;
-}
-
-export function bubblesortStep<T>(array: T[], index: number) {
+export function bubblesortStep<T>(array: T[], index: number): [T[], number] {
   if (array[index] > array[index + 1]) {
-    let temp = array[index];
-    array[index] = array[index + 1];
-    array[index + 1] = temp;
+    arraySwap<T>(array, index);
   }
-  return array;
+  // prettier-ignore
+  index = (index >= array.length - 1) 
+    ? 0 
+    : index + 1;
+
+  return [array, index];
+}
+
+function arraySwap<T>(array: T[], index: number) {
+  let temp = array[index];
+  array[index] = array[index + 1];
+  array[index + 1] = temp;
 }
 
 export function checkIsSorted(array: number[]): boolean {

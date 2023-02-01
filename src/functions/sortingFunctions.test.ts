@@ -1,34 +1,46 @@
-import {
-  bubblesort,
-  bubblesortPass,
-  bubblesortStep,
-  checkIsSorted,
-} from "./sortingFunctions";
-
-test("bubblesort sorts empty array", () => {
-  let array: number[] = [];
-  expect(bubblesort(array)).toStrictEqual([]);
-});
-
-test("bubblesort sorts one element array", () => {
-  let array: number[] = [1];
-  expect(bubblesort(array)).toStrictEqual([1]);
-});
+import { act } from "react-dom/test-utils";
+import { bubblesortStep, checkIsSorted } from "./sortingFunctions";
 
 test("bubblesort step swaps 2 places", () => {
   let array: number[] = [1, 2, 3, 5, 4, 6, 9, 7];
-  expect(bubblesortStep(array, 3)).toStrictEqual([1, 2, 3, 4, 5, 6, 9, 7]);
-  expect(bubblesortStep(array, 4)).toStrictEqual([1, 2, 3, 4, 5, 6, 9, 7]);
-  expect(bubblesortStep(array, 5)).toStrictEqual([1, 2, 3, 4, 5, 6, 9, 7]);
-  expect(bubblesortStep(array, 6)).toStrictEqual([1, 2, 3, 4, 5, 6, 7, 9]);
+  act(() => {
+    [array] = bubblesortStep(array, 3);
+  });
+  expect(array).toStrictEqual([1, 2, 3, 4, 5, 6, 9, 7]);
+  act(() => {
+    [array] = bubblesortStep(array, 4);
+  });
+  expect(array).toStrictEqual([1, 2, 3, 4, 5, 6, 9, 7]);
+  act(() => {
+    [array] = bubblesortStep(array, 5);
+  });
+  expect(array).toStrictEqual([1, 2, 3, 4, 5, 6, 9, 7]);
+  act(() => {
+    [array] = bubblesortStep(array, 6);
+  });
+  expect(array).toStrictEqual([1, 2, 3, 4, 5, 6, 7, 9]);
 });
 
-test("bubblesort does first pass", () => {
-  let array: number[] = [3, 5, 2, 6, 3, 7, 8];
-  expect(bubblesortPass(array)).toStrictEqual([3, 2, 5, 3, 6, 7, 8]);
+test("bubblesort index restarts when it reaches the end of the array", () => {
+  let array: number[] = [1, 2, 3, 4];
+  let index = 3;
 
-  array = [5, 1, 4, 2, 8];
-  expect(bubblesortPass(array)).toStrictEqual([1, 4, 2, 5, 8]);
+  act(() => {
+    [array, index] = bubblesortStep(array, index);
+  });
+
+  expect(index).toStrictEqual(0);
+});
+
+test("bubblesort index goes up one if it's not the end of the array", () => {
+  let array: number[] = [1, 2, 3, 4];
+  let index = 2;
+
+  act(() => {
+    [array, index] = bubblesortStep(array, index);
+  });
+
+  expect(index).toStrictEqual(3);
 });
 
 test("bubblesort checks if it's sorted", () => {
@@ -39,14 +51,4 @@ test("bubblesort checks if it's sorted", () => {
 test("bubblesort checks if it's not sorted", () => {
   let array: number[] = [1, 2, 4, 2];
   expect(checkIsSorted(array)).toBeFalsy();
-});
-
-test("bubblesort does second pass", () => {
-  let array: number[] = [1, 4, 2, 5, 8];
-  expect(bubblesortPass(array)).toStrictEqual([1, 2, 4, 5, 8]);
-});
-
-test("bubblesort sorts array", () => {
-  let array: number[] = [5, 1, 4, 2, 8];
-  expect(bubblesort(array)).toStrictEqual([1, 2, 4, 5, 8]);
 });

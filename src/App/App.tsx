@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { bubblesortStep } from "../functions/sortingFunctions";
+import { bubblesortStep, checkIsSorted } from "../functions/sortingFunctions";
 import "../styles/App.css";
 
 function App() {
@@ -17,11 +17,10 @@ function App() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setColumns(bubblesortStep(columns, index));
-      setIndex(index + 1);
-
-      if (index === numColumns - 2) {
-        setIndex(0);
+      if (!checkIsSorted(columns)) {
+        const [tempColumns, tempIndex] = bubblesortStep(columns, index);
+        setColumns(tempColumns);
+        setIndex(tempIndex);
       }
     }, 1);
 
