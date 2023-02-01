@@ -10,6 +10,21 @@ export function bubblesortStep<T>(array: T[], index: number): [T[], number] {
   return [array, index];
 }
 
+export function insertionSortStep<T>(
+  array: T[],
+  i: number,
+  j: number
+): [T[], number, number] {
+  if (j > 0 && array[j - 1] > array[j]) {
+    arraySwap<T>(array, j - 1);
+    j--;
+  } else {
+    i++;
+    j = i;
+  }
+  return [array, i, j];
+}
+
 function arraySwap<T>(array: T[], index: number) {
   let temp = array[index];
   array[index] = array[index + 1];

@@ -12,6 +12,11 @@ test("Sorting container renders", () => {
   expect(screen.getByTestId("sorting-container")).toBeDefined();
 });
 
+test("shows what algorithm is running", async () => {
+  await render(<App />);
+  expect(screen.getByTestId("current-algorithm")).toBeDefined();
+});
+
 test("renders more that one column to sort", () => {
   render(<App />);
   expect(screen.getAllByTestId("sorting-column").length).toBeGreaterThanOrEqual(
@@ -32,4 +37,14 @@ test("renders quick sort button", () => {
 test("renders bubblesort button", () => {
   render(<App />);
   expect(screen.getByText("Bubblesort")).toBeDefined();
+});
+
+test("renders reset button", () => {
+  render(<App />);
+  expect(screen.getByText("Reset")).toBeDefined();
+});
+
+test("renders start button", () => {
+  render(<App />);
+  expect(screen.getByText("Start")).toBeDefined();
 });
