@@ -1,36 +1,49 @@
-export function bubblesortStep<T>(array: T[], index: number): [T[], number] {
-  if (array[index] > array[index + 1]) {
-    arraySwap<T>(array, index);
-  }
-  // prettier-ignore
-  index = (index >= array.length - 1) 
-    ? 0 
-    : index + 1;
-
-  return [array, index];
+export function bogoSortStep<T>(array: T[]): T[] {
+  const shuffledArray = array.sort((a, b) => 0.5 - Math.random());
+  return shuffledArray;
 }
 
-export function insertionSortStep<T>(
+export function quicksortStep<T>(
   array: T[],
-  i: number,
-  j: number
-): [T[], number, number] {
-  if (j > 0 && array[j - 1] > array[j]) {
-    arraySwap<T>(array, j - 1);
-    j--;
-  } else {
-    i++;
-    j = i;
+  pivotIndex: number,
+  high: number,
+  low: number
+): [T[], number, number, number] {
+  const pivot = array[pivotIndex];
+  high++;
+  if (array[high] <= pivot) {
+    low++;
+    if (array[low] > array[high]) {
+      let temp = array[low];
+      array[low] = array[high];
+      array[high] = temp;
+    }
   }
-  return [array, i, j];
+  return [array, pivotIndex, high, low];
 }
 
-function arraySwap<T>(array: T[], index: number) {
-  let temp = array[index];
-  array[index] = array[index + 1];
-  array[index + 1] = temp;
+export function quicksortPartition<T>(array: T[], pivotIndex: number) {
+  let partitions: T[][] = [[], []];
+  const pivot = array[pivotIndex];
+  const left = 0,
+    right = 1;
+  array.forEach((x) => {
+    if (x < pivot) {
+      partitions[left].push(x);
+    } else if (x > pivot) {
+      partitions[right].push(x);
+    }
+  });
+  partitions[left].push(pivot, ...partitions[right]);
+  return partitions;
 }
 
-export function checkIsSorted(array: number[]): boolean {
+export function arraySwap<T>(array: T[], indexA: number, indexB: number) {
+  let temp = array[indexA];
+  array[indexA] = array[indexB];
+  array[indexB] = temp;
+}
+
+export function checkIsSorted<T>(array: T[]): boolean {
   return !array.some((x, index) => x > array[index + 1]);
 }
