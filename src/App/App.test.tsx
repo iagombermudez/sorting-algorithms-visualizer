@@ -39,6 +39,11 @@ test("renders bubblesort button", () => {
   expect(screen.getByText("Bubblesort")).toBeDefined();
 });
 
+test("renders mergesort button", () => {
+  render(<App />);
+  expect(screen.getByText("Mergesort")).toBeDefined();
+});
+
 test("renders reset button", () => {
   render(<App />);
   expect(screen.getByText("Reset")).toBeDefined();

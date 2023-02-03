@@ -42,7 +42,7 @@ test("mergesort sorts empty list", () => {
   let array: number[] = [];
 
   act(() => {
-    array = mergeSort(array, 0, 0 - 1);
+    mergeSort(array);
   });
   expect(array).toStrictEqual([]);
 });
@@ -51,7 +51,7 @@ test("mergesort sorts 2 element list", () => {
   let array: number[] = [2, 1];
 
   act(() => {
-    array = mergeSort(array, 0, 1);
+    mergeSort(array);
   });
   expect(array).toStrictEqual([1, 2]);
 });
@@ -60,7 +60,19 @@ test("mergesort sorts 4 element list", () => {
   let array: number[] = [2, 1, 4, 3];
 
   act(() => {
-    array = mergeSort(array, 0, array.length - 1);
+    mergeSort(array);
   });
   expect(array).toStrictEqual([1, 2, 3, 4]);
+});
+
+test("mergesort sorts 100 element list", () => {
+  let array: number[] = Array.from({ length: 100 }, () =>
+    Math.floor(Math.random() * 100)
+  );
+  let sortedArray = array.sort();
+
+  act(() => {
+    mergeSort(array);
+  });
+  expect(array).toStrictEqual(sortedArray);
 });

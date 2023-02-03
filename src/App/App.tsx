@@ -7,6 +7,7 @@ import {
   BubbleSort,
   InsertionSort,
   ISortingAlgorithm,
+  MergeSort,
   QuickSort,
 } from "../classes/SortingAlgorithm";
 import { arraySwap, checkIsSorted } from "../functions/sortingFunctions";
@@ -25,7 +26,7 @@ function App() {
   const [currentAlgorithm, setCurrentAlgorithm] = useState<ISortingAlgorithm>(
     new BubbleSort()
   );
-  const [animations, setAnimations] = useState<Anim[]>([]);
+  const [animations, setAnimations] = useState<Anim<number>[]>([]);
   function initializeRandomSortingColumns(): number[] {
     return Array.from({ length: numColumns }, () => Math.random() * 100);
   }
@@ -37,14 +38,13 @@ function App() {
         const tempColumns = [...columns];
         const nextAnim = animations.shift();
         if (nextAnim) {
-          const nextSwap = nextAnim.swap;
-          arraySwap(tempColumns, nextSwap[0], nextSwap[1]);
+          tempColumns[nextAnim.pos] = nextAnim.value;
           setColumns(tempColumns);
           if (animations.length === 0) {
             setIsRunning(false);
           }
         }
-      }, 1);
+      }, 5);
       return () => clearTimeout(timer);
     }
   });
@@ -108,6 +108,12 @@ function App() {
           onClick={() => handleChangeCurrentAlgorithm(new BubbleSort())}
         >
           Bubblesort
+        </button>
+        <button
+          className="button"
+          onClick={() => handleChangeCurrentAlgorithm(new MergeSort())}
+        >
+          Mergesort
         </button>
         <button
           className="button"
