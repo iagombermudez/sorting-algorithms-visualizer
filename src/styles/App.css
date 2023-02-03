@@ -3,9 +3,8 @@
 }
 
 .sorting-container {
-  border: 1px solid #000;
-  width: 60vw;
-  height: 70vh;
+  width: 100vw;
+  height: 65vh;
   margin: auto;
   display: flex;
   flex-direction: row;
@@ -17,4 +16,15 @@
   height: 100%;
   width: 1%;
   margin-top: auto;
+}
+
+.button {
+  background-color: #ffa62b;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5%;
+  font-weight: lighter;
+  color: #000;
+  margin: 0.25rem;
+  width: 7rem;
 }

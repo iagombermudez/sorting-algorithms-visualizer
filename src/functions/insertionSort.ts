@@ -1,16 +1,15 @@
+import { Anim } from "../classes/Animation";
 import { arraySwap } from "./sortingFunctions";
 
-export function insertionSortStep<T>(
-  array: T[],
-  i: number,
-  j: number
-): [T[], number, number] {
-  if (j > 0 && array[j - 1] > array[j]) {
-    arraySwap<T>(array, j - 1, j);
-    j--;
-  } else {
-    i++;
-    j = i;
+export function insertionSort<T>(array: T[]) {
+  let animations: Anim[] = [];
+  for (let i = 0; i < array.length; i++) {
+    let j = i;
+    while (j > 0 && array[j] < array[j - 1]) {
+      arraySwap(array, j, j - 1);
+      animations.push(new Anim([j, j - 1]));
+      j--;
+    }
   }
-  return [array, i, j];
+  return animations;
 }

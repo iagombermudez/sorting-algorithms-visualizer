@@ -1,13 +1,15 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Anim } from "../classes/Animation";
 import {
+  BogoSort,
   BubbleSort,
   InsertionSort,
   ISortingAlgorithm,
   QuickSort,
 } from "../classes/SortingAlgorithm";
-import { bubblesortStep, checkIsSorted } from "../functions/sortingFunctions";
+import { arraySwap, checkIsSorted } from "../functions/sortingFunctions";
 import "../styles/App.css";
 
 function App() {
@@ -18,11 +20,12 @@ function App() {
   const [originalColumns, setOriginalColumns] = useState<number[]>([
     ...columns,
   ]);
-  const [indexes, setIndexes] = useState<number[]>([]);
+
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [currentAlgorithm, setCurrentAlgorithm] = useState<ISortingAlgorithm>(
     new BubbleSort()
   );
+  const [animations, setAnimations] = useState<Anim[]>([]);
   function initializeRandomSortingColumns(): number[] {
     return Array.from({ length: numColumns }, () => Math.random() * 100);
   }
@@ -31,17 +34,18 @@ function App() {
     if (!isRunning) return;
     if (!checkIsSorted(columns)) {
       const timer = setTimeout(() => {
-        const [tempColumns, tempIndex] = currentAlgorithm.algorithm(
-          columns,
-          indexes
-        );
-        setColumns(tempColumns);
-        setIndexes(tempIndex);
-      }, 5);
+        const tempColumns = [...columns];
+        const nextAnim = animations.shift();
+        if (nextAnim) {
+          const nextSwap = nextAnim.swap;
+          arraySwap(tempColumns, nextSwap[0], nextSwap[1]);
+          setColumns(tempColumns);
+          if (animations.length === 0) {
+            setIsRunning(false);
+          }
+        }
+      }, 1);
       return () => clearTimeout(timer);
-    } else {
-      setIsRunning(false);
-      setIndexes(currentAlgorithm.defaultIndexes);
     }
   });
 
@@ -52,11 +56,14 @@ function App() {
 
   function resetColumns() {
     setIsRunning(false);
-    setIndexes(currentAlgorithm.defaultIndexes);
+    setAnimations([]);
     setColumns([...originalColumns]);
   }
 
   function handleChangeIsRunning() {
+    if (!isRunning && animations.length === 0) {
+      setAnimations(currentAlgorithm.algorithm([...columns]));
+    }
     setIsRunning(!isRunning);
   }
 
@@ -77,29 +84,43 @@ function App() {
             data-testid="sorting-column"
             style={{
               height: `${c}%`,
-              border: "1px solid #000",
-              backgroundColor:
-                indexes[0] <= i + 1 && indexes[0] >= i - 1 ? "red" : "blue",
+              border: "1px solid #ede7e3",
+              backgroundColor: "#489FB5",
             }}
           />
         ))}
       </div>
       <div>
         <button
+          className="button"
           onClick={() => handleChangeCurrentAlgorithm(new InsertionSort())}
         >
           Insertion Sort
         </button>
-        <button onClick={() => handleChangeCurrentAlgorithm(new QuickSort())}>
+        <button
+          className="button"
+          onClick={() => handleChangeCurrentAlgorithm(new QuickSort())}
+        >
           Quicksort
         </button>
-        <button onClick={() => handleChangeCurrentAlgorithm(new BubbleSort())}>
+        <button
+          className="button"
+          onClick={() => handleChangeCurrentAlgorithm(new BubbleSort())}
+        >
           Bubblesort
+        </button>
+        <button
+          className="button"
+          onClick={() => handleChangeCurrentAlgorithm(new BogoSort())}
+        >
+          Bogosort
         </button>
       </div>
       <div>
-        <button onClick={resetColumns}>Reset</button>
-        <button onClick={handleChangeIsRunning}>
+        <button className="button" onClick={resetColumns}>
+          Reset
+        </button>
+        <button className="button" onClick={handleChangeIsRunning}>
           {isRunning ? "Stop" : "Start"}
         </button>
       </div>
