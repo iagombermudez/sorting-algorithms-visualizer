@@ -5,6 +5,7 @@ import { Anim } from "../classes/Animation";
 import {
   BogoSort,
   BubbleSort,
+  HeapSort,
   InsertionSort,
   ISortingAlgorithm,
   MergeSort,
@@ -121,6 +122,12 @@ function App() {
           onClick={() => handleChangeCurrentAlgorithm(new MergeSort())}
         >
           Mergesort
+        </button>
+        <button
+          className="button"
+          onClick={() => handleChangeCurrentAlgorithm(new HeapSort())}
+        >
+          Heapsort
         </button>
         <button
           className="button"

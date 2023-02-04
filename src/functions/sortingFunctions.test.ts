@@ -1,4 +1,5 @@
 import { act } from "react-dom/test-utils";
+import { heapsort } from "./heapsort";
 import { insertionSort } from "./insertionSort";
 import { mergeSort } from "./mergeSort";
 import { quicksort } from "./quicksort";
@@ -137,6 +138,28 @@ test("selectionsort sorts 100 element list", () => {
 
   act(() => {
     selectionsort(array);
+  });
+  expect(array).toStrictEqual(sortedArray);
+});
+
+test("heapsort sorts 2 element list", () => {
+  let array: number[] = [2, 1];
+
+  act(() => {
+    heapsort(array);
+  });
+  expect(array).toStrictEqual([1, 2]);
+});
+
+test("heapsort sorts 100 element list", () => {
+  let array: number[] = Array.from({ length: 100 }, () =>
+    Math.floor(Math.random() * 100)
+  );
+  let sortedArray = [...array];
+  sortedArray.sort((a, b) => a - b);
+
+  act(() => {
+    heapsort(array);
   });
   expect(array).toStrictEqual(sortedArray);
 });

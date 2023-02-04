@@ -1,4 +1,5 @@
 import { bubblesort } from "../functions/bubblesort";
+import { heapsort } from "../functions/heapsort";
 import { insertionSort } from "../functions/insertionSort";
 import { mergeSort } from "../functions/mergeSort";
 import { quicksort } from "../functions/quicksort";
@@ -50,6 +51,15 @@ export class SelectionSort implements ISortingAlgorithm {
     return selectionsort(array);
   }
 }
+
+export class HeapSort implements ISortingAlgorithm {
+  name: string = "selection sort";
+  defaultIndexes: number[] = [0];
+  algorithm(array: number[]): Anim<number>[] {
+    return heapsort(array);
+  }
+}
+
 export class BogoSort implements ISortingAlgorithm {
   name: string = "bogosort";
   defaultIndexes: number[] = [];
