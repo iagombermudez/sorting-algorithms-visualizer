@@ -9,10 +9,8 @@ export class Anim<T> {
   static arraySwapAnimation<T>(
     array: T[],
     i: number,
-    j: number,
-    animations: Anim<T>[]
+    j: number
   ): [Anim<T>, Anim<T>] {
-    let temp = array[i];
-    return [new Anim(i, array[j]), new Anim(j, temp)];
+    return [new Anim(i, array[j]), new Anim(j, array[i])];
   }
 }

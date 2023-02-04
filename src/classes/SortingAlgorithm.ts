@@ -1,7 +1,8 @@
 import { bubblesort } from "../functions/bubblesort";
 import { insertionSort } from "../functions/insertionSort";
 import { mergeSort } from "../functions/mergeSort";
-import { bogoSortStep } from "../functions/sortingFunctions";
+import { quicksort } from "../functions/quicksort";
+import { selectionsort } from "../functions/selectionsort";
 import { Anim } from "./Animation";
 
 export interface ISortingAlgorithm {
@@ -38,10 +39,17 @@ export class QuickSort implements ISortingAlgorithm {
   name: string = "quicksort";
   defaultIndexes: number[] = [0];
   algorithm(array: number[]): Anim<number>[] {
-    throw new Error("Method not implemented.");
+    return quicksort(array);
   }
 }
 
+export class SelectionSort implements ISortingAlgorithm {
+  name: string = "selection sort";
+  defaultIndexes: number[] = [0];
+  algorithm(array: number[]): Anim<number>[] {
+    return selectionsort(array);
+  }
+}
 export class BogoSort implements ISortingAlgorithm {
   name: string = "bogosort";
   defaultIndexes: number[] = [];

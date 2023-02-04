@@ -9,6 +9,7 @@ import {
   ISortingAlgorithm,
   MergeSort,
   QuickSort,
+  SelectionSort,
 } from "../classes/SortingAlgorithm";
 import { arraySwap, checkIsSorted } from "../functions/sortingFunctions";
 import "../styles/App.css";
@@ -96,6 +97,12 @@ function App() {
           onClick={() => handleChangeCurrentAlgorithm(new InsertionSort())}
         >
           Insertion Sort
+        </button>
+        <button
+          className="button"
+          onClick={() => handleChangeCurrentAlgorithm(new SelectionSort())}
+        >
+          Selection Sort
         </button>
         <button
           className="button"

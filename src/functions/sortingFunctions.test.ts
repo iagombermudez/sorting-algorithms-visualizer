@@ -1,7 +1,8 @@
 import { act } from "react-dom/test-utils";
-import { Extension } from "typescript";
 import { insertionSort } from "./insertionSort";
 import { mergeSort } from "./mergeSort";
+import { quicksort } from "./quicksort";
+import { selectionsort } from "./selectionsort";
 import { checkIsSorted } from "./sortingFunctions";
 
 test("checks if it's sorted", () => {
@@ -69,10 +70,73 @@ test("mergesort sorts 100 element list", () => {
   let array: number[] = Array.from({ length: 100 }, () =>
     Math.floor(Math.random() * 100)
   );
-  let sortedArray = array.sort();
+  let sortedArray = [...array];
+  sortedArray.sort((a, b) => a - b);
 
   act(() => {
     mergeSort(array);
+  });
+  expect(array).toStrictEqual(sortedArray);
+});
+
+test("quicksort sorts 2 element list", () => {
+  let array: number[] = [2, 1];
+
+  act(() => {
+    quicksort(array);
+  });
+  expect(array).toStrictEqual([1, 2]);
+});
+
+test("quicksort sorts 4 element list", () => {
+  let array: number[] = [2, 1, 4, 3];
+
+  act(() => {
+    quicksort(array);
+  });
+  expect(array).toStrictEqual([1, 2, 3, 4]);
+});
+
+test("quicksort sorts 100 element list", () => {
+  let array: number[] = Array.from({ length: 100 }, () =>
+    Math.floor(Math.random() * 100)
+  );
+  let sortedArray = [...array];
+  sortedArray.sort((a, b) => a - b);
+
+  act(() => {
+    quicksort(array);
+  });
+  expect(array).toStrictEqual(sortedArray);
+});
+
+test("selectionsort sorts 2 element list", () => {
+  let array: number[] = [2, 1];
+
+  act(() => {
+    selectionsort(array);
+  });
+  expect(array).toStrictEqual([1, 2]);
+});
+
+test("selectionsort sorts 4 element list", () => {
+  let array: number[] = [2, 1, 4, 3];
+
+  act(() => {
+    selectionsort(array);
+  });
+  expect(array).toStrictEqual([1, 2, 3, 4]);
+});
+
+test("selectionsort sorts 100 element list", () => {
+  let array: number[] = Array.from({ length: 100 }, () =>
+    Math.floor(Math.random() * 100)
+  );
+  let sortedArray = [...array];
+  sortedArray.sort((a, b) => a - b);
+
+  act(() => {
+    selectionsort(array);
   });
   expect(array).toStrictEqual(sortedArray);
 });

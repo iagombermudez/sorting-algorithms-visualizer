@@ -44,6 +44,11 @@ test("renders mergesort button", () => {
   expect(screen.getByText("Mergesort")).toBeDefined();
 });
 
+test("renders selection sort button", () => {
+  render(<App />);
+  expect(screen.getByText("Selection Sort")).toBeDefined();
+});
+
 test("renders reset button", () => {
   render(<App />);
   expect(screen.getByText("Reset")).toBeDefined();

@@ -6,9 +6,7 @@ export function insertionSort<T>(array: T[]) {
   for (let i = 0; i < array.length; i++) {
     let j = i;
     while (j > 0 && array[j] < array[j - 1]) {
-      animations.push(
-        ...Anim.arraySwapAnimation<T>(array, j - 1, j, animations)
-      );
+      animations.push(...Anim.arraySwapAnimation<T>(array, j - 1, j));
       arraySwap(array, j, j - 1);
       j--;
     }
