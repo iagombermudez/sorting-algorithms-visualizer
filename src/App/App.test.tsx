@@ -12,11 +12,6 @@ test("Sorting container renders", () => {
   expect(screen.getByTestId("sorting-container")).toBeDefined();
 });
 
-test("shows what algorithm is running", async () => {
-  await render(<App />);
-  expect(screen.getByTestId("current-algorithm")).toBeDefined();
-});
-
 test("renders more that one column to sort", () => {
   render(<App />);
   expect(screen.getAllByTestId("sorting-column").length).toBeGreaterThanOrEqual(
@@ -26,32 +21,32 @@ test("renders more that one column to sort", () => {
 
 test("renders insertion sort button", () => {
   render(<App />);
-  expect(screen.getByText("Insertion Sort")).toBeDefined();
+  expect(screen.getByText("insertion sort")).toBeDefined();
 });
 
 test("renders quick sort button", () => {
   render(<App />);
-  expect(screen.getByText("Quicksort")).toBeDefined();
+  expect(screen.getByText("quicksort")).toBeDefined();
 });
 
 test("renders bubblesort button", () => {
   render(<App />);
-  expect(screen.getByText("Bubblesort")).toBeDefined();
+  expect(screen.getByText("bubblesort")).toBeDefined();
 });
 
 test("renders mergesort button", () => {
   render(<App />);
-  expect(screen.getByText("Mergesort")).toBeDefined();
+  expect(screen.getByText("mergesort")).toBeDefined();
 });
 
 test("renders heapsort button", () => {
   render(<App />);
-  expect(screen.getByText("Heapsort")).toBeDefined();
+  expect(screen.getByText("heapsort")).toBeDefined();
 });
 
 test("renders selection sort button", () => {
   render(<App />);
-  expect(screen.getByText("Selection Sort")).toBeDefined();
+  expect(screen.getByText("selection sort")).toBeDefined();
 });
 
 test("renders reset button", () => {

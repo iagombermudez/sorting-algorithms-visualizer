@@ -1,8 +1,8 @@
 import { Anim } from "../classes/Animation";
 import { arraySwap } from "./sortingFunctions";
 
-export function quicksort<T>(array: T[]): Anim<T>[] {
-  let animations: Anim<T>[] = [];
+export function quicksort<T>(array: T[]): Anim<T>[][] {
+  let animations: Anim<T>[][] = [];
   _quicksort(array, 0, array.length - 1, animations);
   return animations;
 }
@@ -11,7 +11,7 @@ function _quicksort<T>(
   array: T[],
   low: number,
   high: number,
-  animations: Anim<T>[]
+  animations: Anim<T>[][]
 ): void {
   if (low < high) {
     let part = partition(array, low, high, animations);
@@ -24,18 +24,20 @@ function partition<T>(
   array: T[],
   low: number,
   high: number,
-  animations: Anim<T>[]
+  animations: Anim<T>[][]
 ): number {
   const pivot = array[high];
   let i = low - 1;
   for (let j = low; j < high; j++) {
     if (array[j] < pivot) {
       i++;
-      animations.push(...Anim.arraySwapAnimation(array, i, j));
+      animations.push(Anim.arraySwapAnimation(array, i, j, [i, j, low, high]));
       arraySwap(array, i, j);
     }
   }
-  animations.push(...Anim.arraySwapAnimation(array, i + 1, high));
+  animations.push(
+    Anim.arraySwapAnimation(array, i + 1, high, [i + 1, low, high])
+  );
   arraySwap(array, i + 1, high);
   return i + 1;
 }

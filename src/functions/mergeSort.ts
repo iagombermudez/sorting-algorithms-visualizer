@@ -1,7 +1,7 @@
 import { Anim } from "../classes/Animation";
 
-export function mergeSort<T>(array: T[]): Anim<T>[] {
-  let animations: Anim<T>[] = [];
+export function mergeSort<T>(array: T[]): Anim<T>[][] {
+  let animations: Anim<T>[][] = [];
   _mergeSort(array, 0, array.length - 1, animations);
   return animations;
 }
@@ -10,7 +10,7 @@ function _mergeSort<T>(
   array: T[],
   left: number,
   right: number,
-  animations: Anim<T>[]
+  animations: Anim<T>[][]
 ): T[] {
   if (left >= right) return [];
   const middle = Math.floor((right + left) / 2);
@@ -25,7 +25,7 @@ export function merge<T>(
   left: number,
   middle: number,
   right: number,
-  animations: Anim<T>[]
+  animations: Anim<T>[][]
 ) {
   const sizeLeft = middle - left + 1;
   const sizeRight = right - middle;
@@ -47,11 +47,13 @@ export function merge<T>(
   while (i < sizeLeft && j < sizeRight) {
     if (arrayLeft[i] <= arrayRight[j]) {
       array[k] = arrayLeft[i];
-      animations.push(new Anim(k, arrayLeft[i]));
+      animations.push([new Anim(k, arrayLeft[i], [k, i, left, right, middle])]);
       i++;
     } else {
       array[k] = arrayRight[j];
-      animations.push(new Anim(k, arrayRight[j]));
+      animations.push([
+        new Anim(k, arrayRight[j], [k, j, left, right, middle]),
+      ]);
       j++;
     }
     k++;
@@ -59,14 +61,14 @@ export function merge<T>(
 
   while (i < sizeLeft) {
     array[k] = arrayLeft[i];
-    animations.push(new Anim(k, arrayLeft[i]));
+    animations.push([new Anim(k, arrayLeft[i], [k, i, left, right, middle])]);
     k++;
     i++;
   }
 
   while (j < sizeRight) {
     array[k] = arrayRight[j];
-    animations.push(new Anim(k, arrayRight[j]));
+    animations.push([new Anim(k, arrayRight[j], [k, j, left, right, middle])]);
     k++;
     j++;
   }

@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Anim } from "../classes/Animation";
 import {
-  BogoSort,
   BubbleSort,
   HeapSort,
   InsertionSort,
@@ -12,10 +11,18 @@ import {
   QuickSort,
   SelectionSort,
 } from "../classes/SortingAlgorithm";
-import { arraySwap, checkIsSorted } from "../functions/sortingFunctions";
+import AlgorithmButton from "../components/AlgorithmButton";
 import "../styles/App.css";
 
 function App() {
+  const algorithms = [
+    new InsertionSort(),
+    new SelectionSort(),
+    new QuickSort(),
+    new BubbleSort(),
+    new MergeSort(),
+    new HeapSort(),
+  ];
   const [numColumns, setNumColumns] = useState(100);
   const [columns, setColumns] = useState<number[]>(
     initializeRandomSortingColumns()
@@ -28,22 +35,43 @@ function App() {
   const [currentAlgorithm, setCurrentAlgorithm] = useState<ISortingAlgorithm>(
     new BubbleSort()
   );
-  const [animations, setAnimations] = useState<Anim<number>[]>([]);
+  const [animations, setAnimations] = useState<Anim<number>[][]>([]);
+  const [indexes, setIndexes] = useState<number[]>([]);
+  const [sortedAnimIsRunning, setSortedAnimIsRunning] =
+    useState<boolean>(false);
+
   function initializeRandomSortingColumns(): number[] {
     return Array.from({ length: numColumns }, () => Math.random() * 100);
   }
 
   useEffect(() => {
     if (!isRunning) return;
-    if (!checkIsSorted(columns)) {
+    if (animations.length > 0 || sortedAnimIsRunning) {
       const timer = setTimeout(() => {
-        const tempColumns = [...columns];
-        const nextAnim = animations.shift();
-        if (nextAnim) {
-          tempColumns[nextAnim.pos] = nextAnim.value;
-          setColumns(tempColumns);
-          if (animations.length === 0) {
+        if (sortedAnimIsRunning) {
+          let tempIndexes = [...indexes];
+          if (tempIndexes.length < columns.length) {
+            tempIndexes.push(tempIndexes.length);
+            setIndexes(tempIndexes);
+          } else {
             setIsRunning(false);
+          }
+        } else {
+          let tempColumns: number[] = [...columns];
+          let tempIndexes: number[] = [];
+          const nextAnim = animations.shift();
+          if (nextAnim) {
+            nextAnim.forEach((anim) => {
+              tempColumns[anim.pos] = anim.value;
+              tempIndexes.push(...anim.indexes);
+            });
+            setColumns(tempColumns);
+            setIndexes(tempIndexes);
+
+            if (animations.length === 0) {
+              setIndexes([]);
+              setSortedAnimIsRunning(true);
+            }
           }
         }
       }, 5);
@@ -58,6 +86,8 @@ function App() {
 
   function resetColumns() {
     setIsRunning(false);
+    setSortedAnimIsRunning(false);
+    setIndexes([]);
     setAnimations([]);
     setColumns([...originalColumns]);
   }
@@ -72,12 +102,6 @@ function App() {
   return (
     <div className="App">
       <h1>Sorting Algorithms Visualizer</h1>
-      <h3 data-testid="current-algorithm">
-        Current algorithm:{" "}
-        <span style={{ fontStyle: "italic", fontWeight: "normal" }}>
-          {currentAlgorithm.name}
-        </span>{" "}
-      </h3>
       <div className="sorting-container" data-testid={"sorting-container"}>
         {columns.map((c, i) => (
           <div
@@ -87,62 +111,36 @@ function App() {
             style={{
               height: `${c}%`,
               border: "1px solid #ede7e3",
-              backgroundColor: "#489FB5",
+              backgroundColor: indexes.includes(i)
+                ? sortedAnimIsRunning
+                  ? "#34ca5f"
+                  : "#ffa62b"
+                : "#49c2e0",
             }}
           />
         ))}
       </div>
-      <div>
-        <button
-          className="button"
-          onClick={() => handleChangeCurrentAlgorithm(new InsertionSort())}
-        >
-          Insertion Sort
-        </button>
-        <button
-          className="button"
-          onClick={() => handleChangeCurrentAlgorithm(new SelectionSort())}
-        >
-          Selection Sort
-        </button>
-        <button
-          className="button"
-          onClick={() => handleChangeCurrentAlgorithm(new QuickSort())}
-        >
-          Quicksort
-        </button>
-        <button
-          className="button"
-          onClick={() => handleChangeCurrentAlgorithm(new BubbleSort())}
-        >
-          Bubblesort
-        </button>
-        <button
-          className="button"
-          onClick={() => handleChangeCurrentAlgorithm(new MergeSort())}
-        >
-          Mergesort
-        </button>
-        <button
-          className="button"
-          onClick={() => handleChangeCurrentAlgorithm(new HeapSort())}
-        >
-          Heapsort
-        </button>
-        <button
-          className="button"
-          onClick={() => handleChangeCurrentAlgorithm(new BogoSort())}
-        >
-          Bogosort
-        </button>
-      </div>
-      <div>
-        <button className="button" onClick={resetColumns}>
-          Reset
-        </button>
-        <button className="button" onClick={handleChangeIsRunning}>
-          {isRunning ? "Stop" : "Start"}
-        </button>
+      <div className="buttons-container">
+        <div className="buttons-container-child">
+          {algorithms.map((alg) => (
+            <AlgorithmButton
+              algorithm={alg}
+              currentAlgorithm={currentAlgorithm}
+              handleChangeCurrentAlgorithm={handleChangeCurrentAlgorithm}
+            />
+          ))}
+        </div>
+        <div className="buttons-container-child">
+          <button className="button" onClick={resetColumns}>
+            Reset
+          </button>
+          <button
+            className={"button " + (isRunning ? "button-stop" : "button-start")}
+            onClick={handleChangeIsRunning}
+          >
+            {isRunning ? "Stop" : "Start"}
+          </button>
+        </div>
       </div>
     </div>
   );

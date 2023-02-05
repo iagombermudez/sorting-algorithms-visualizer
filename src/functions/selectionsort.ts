@@ -1,8 +1,8 @@
 import { Anim } from "../classes/Animation";
 import { arraySwap } from "./sortingFunctions";
 
-export function selectionsort<T>(array: T[]): Anim<T>[] {
-  let animations: Anim<T>[] = [];
+export function selectionsort<T>(array: T[]): Anim<T>[][] {
+  let animations: Anim<T>[][] = [];
 
   for (let i = 0; i < array.length - 1; i++) {
     let minIndex = i;
@@ -12,7 +12,7 @@ export function selectionsort<T>(array: T[]): Anim<T>[] {
       }
     }
 
-    animations.push(...Anim.arraySwapAnimation(array, i, minIndex));
+    animations.push(Anim.arraySwapAnimation(array, i, minIndex, [i, minIndex]));
     arraySwap(array, minIndex, i);
   }
   return animations;
