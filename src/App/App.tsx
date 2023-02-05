@@ -12,6 +12,7 @@ import {
   SelectionSort,
 } from "../classes/SortingAlgorithm";
 import AlgorithmButton from "../components/AlgorithmButton";
+import { checkIsSorted } from "../functions/sortingFunctions";
 import "../styles/App.css";
 
 function App() {
@@ -80,8 +81,10 @@ function App() {
   });
 
   function handleChangeCurrentAlgorithm(newAlgorithm: ISortingAlgorithm) {
-    setCurrentAlgorithm(newAlgorithm);
-    resetColumns();
+    if (currentAlgorithm.name !== newAlgorithm.name) {
+      setCurrentAlgorithm(newAlgorithm);
+      resetColumns();
+    }
   }
 
   function resetColumns() {
@@ -96,7 +99,7 @@ function App() {
     if (!isRunning && animations.length === 0) {
       setAnimations(currentAlgorithm.algorithm([...columns]));
     }
-    setIsRunning(!isRunning);
+    if (!checkIsSorted(columns)) setIsRunning(!isRunning);
   }
 
   return (
