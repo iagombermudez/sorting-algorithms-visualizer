@@ -1,8 +1,9 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Anim } from "../classes/Animation";
+import { Anim } from "../../classes/Animation";
 import {
+  BogoSort,
   BubbleSort,
   HeapSort,
   InsertionSort,
@@ -10,31 +11,31 @@ import {
   MergeSort,
   QuickSort,
   SelectionSort,
-} from "../classes/SortingAlgorithm";
-import AlgorithmButton from "../components/AlgorithmButton";
-import { checkIsSorted } from "../functions/sortingFunctions";
-import "../styles/App.css";
+} from "../../classes/SortingAlgorithm";
+import AlgorithmButton from "../AlgorithmButton";
+import { checkIsSorted } from "../../functions/sortingFunctions";
+import "../../styles/App.css";
+import GitHubLink from "../GitHubLink";
+import ButtonsContainer from "../ButtonsContainer";
 
 function App() {
-  const algorithms = [
+  const numColumns = 100;
+  const algorithms: ISortingAlgorithm[] = [
     new InsertionSort(),
     new SelectionSort(),
     new QuickSort(),
     new BubbleSort(),
     new MergeSort(),
     new HeapSort(),
+    new BogoSort(),
   ];
-  const [numColumns, setNumColumns] = useState(100);
+
   const [columns, setColumns] = useState<number[]>(
     initializeRandomSortingColumns()
   );
-  const [originalColumns, setOriginalColumns] = useState<number[]>([
-    ...columns,
-  ]);
-
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [currentAlgorithm, setCurrentAlgorithm] = useState<ISortingAlgorithm>(
-    new BubbleSort()
+    algorithms[0]
   );
   const [animations, setAnimations] = useState<Anim<number>[][]>([]);
   const [indexes, setIndexes] = useState<number[]>([]);
@@ -50,35 +51,43 @@ function App() {
     if (animations.length > 0 || sortedAnimIsRunning) {
       const timer = setTimeout(() => {
         if (sortedAnimIsRunning) {
-          let tempIndexes = [...indexes];
-          if (tempIndexes.length < columns.length) {
-            tempIndexes.push(tempIndexes.length);
-            setIndexes(tempIndexes);
-          } else {
-            setIsRunning(false);
-          }
+          playColumnsAreSortedAnimation();
         } else {
-          let tempColumns: number[] = [...columns];
-          let tempIndexes: number[] = [];
-          const nextAnim = animations.shift();
-          if (nextAnim) {
-            nextAnim.forEach((anim) => {
-              tempColumns[anim.pos] = anim.value;
-              tempIndexes.push(...anim.indexes);
-            });
-            setColumns(tempColumns);
-            setIndexes(tempIndexes);
-
-            if (animations.length === 0) {
-              setIndexes([]);
-              setSortedAnimIsRunning(true);
-            }
-          }
+          playSortAnimation();
         }
       }, 5);
       return () => clearTimeout(timer);
     }
   });
+
+  function playColumnsAreSortedAnimation() {
+    let tempIndexes = [...indexes];
+    if (tempIndexes.length < columns.length) {
+      tempIndexes.push(tempIndexes.length);
+      setIndexes(tempIndexes);
+    } else {
+      setIsRunning(false);
+    }
+  }
+
+  function playSortAnimation() {
+    let tempColumns: number[] = [...columns];
+    let tempIndexes: number[] = [];
+    const nextAnim = animations.shift();
+    if (nextAnim) {
+      nextAnim.forEach((anim) => {
+        tempColumns[anim.pos] = anim.value;
+        tempIndexes.push(...anim.indexes);
+      });
+      setColumns(tempColumns);
+      setIndexes(tempIndexes);
+
+      if (animations.length === 0) {
+        setIndexes([]);
+        setSortedAnimIsRunning(true);
+      }
+    }
+  }
 
   function handleChangeCurrentAlgorithm(newAlgorithm: ISortingAlgorithm) {
     if (currentAlgorithm.name !== newAlgorithm.name) {
@@ -92,7 +101,7 @@ function App() {
     setSortedAnimIsRunning(false);
     setIndexes([]);
     setAnimations([]);
-    setColumns([...originalColumns]);
+    setColumns(initializeRandomSortingColumns());
   }
 
   function handleChangeIsRunning() {
@@ -123,28 +132,15 @@ function App() {
           />
         ))}
       </div>
-      <div className="buttons-container">
-        <div className="buttons-container-child">
-          {algorithms.map((alg) => (
-            <AlgorithmButton
-              algorithm={alg}
-              currentAlgorithm={currentAlgorithm}
-              handleChangeCurrentAlgorithm={handleChangeCurrentAlgorithm}
-            />
-          ))}
-        </div>
-        <div className="buttons-container-child">
-          <button className="button" onClick={resetColumns}>
-            Reset
-          </button>
-          <button
-            className={"button " + (isRunning ? "button-stop" : "button-start")}
-            onClick={handleChangeIsRunning}
-          >
-            {isRunning ? "Stop" : "Start"}
-          </button>
-        </div>
-      </div>
+      <ButtonsContainer
+        resetColumns={resetColumns}
+        isRunning={isRunning}
+        handleChangeIsRunning={handleChangeIsRunning}
+        algorithms={algorithms}
+        currentAlgorithm={currentAlgorithm}
+        handleChangeCurrentAlgorithm={handleChangeCurrentAlgorithm}
+      />
+      <GitHubLink />
     </div>
   );
 }

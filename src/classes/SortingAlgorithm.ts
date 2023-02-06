@@ -1,3 +1,4 @@
+import { bogosort } from "../functions/bogosort";
 import { bubblesort } from "../functions/bubblesort";
 import { heapsort } from "../functions/heapsort";
 import { insertionSort } from "../functions/insertionSort";
@@ -64,6 +65,6 @@ export class BogoSort implements ISortingAlgorithm {
   name: string = "bogosort";
   defaultIndexes: number[] = [];
   algorithm(array: number[]): Anim<number>[][] {
-    throw new Error("Method not implemented.");
+    return bogosort(array);
   }
 }
